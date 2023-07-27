@@ -54,5 +54,8 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling)
+
     androidTestImplementation(composeBom)
+
+    implementation(libs.koin.android)
 }
