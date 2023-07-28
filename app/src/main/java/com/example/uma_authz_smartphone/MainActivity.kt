@@ -4,12 +4,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,13 +34,21 @@ class MainActivity : ComponentActivity() {
             Uma_authz_smartphoneTheme {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
-                NavHost(navController, startDestination = "greeting"){
-                    composable("greeting"){
-                        Surface(
-                            modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colorScheme.background
-                        ) {
-                            Greeting("Android")
+                val items: List<String> = listOf("authorize", "manage", "policy")
+                
+                Scaffold(
+                    bottomBar = {BottomNavigationBar(items = items, navController = navController)}
+                ) {
+                    val modifier = Modifier.padding(it)
+                    NavHost(navController, startDestination = "authorize"){
+                        composable("authorize"){
+                            Greeting(name = "authorize", modifier)
+                        }
+                        composable("manage"){
+                            Greeting(name = "manage", modifier)
+                        }
+                        composable("policy"){
+                            Greeting(name = "policy", modifier)
                         }
                     }
                 }
@@ -36,6 +56,32 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+@Composable
+fun BottomNavigationBar(
+    items: List<String>,
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+    NavigationBar(
+        modifier,
+    ) {
+        var selectedItem by remember { mutableStateOf(0) }
+        items.forEachIndexed { index, item ->
+            NavigationBarItem(
+                icon = { Icon(Icons.Filled.Favorite, contentDescription = item) },
+                label = { Text(item) },
+                selected = selectedItem == index,
+                onClick = {
+                    selectedItem = index
+                    navController.navigate(item)
+                }
+            )
+        }
+    }
+}
+
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
