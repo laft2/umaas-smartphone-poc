@@ -25,6 +25,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.uma_authz_smartphone.ui.authz.AuthzScreen
+import com.example.uma_authz_smartphone.ui.manage.ManageScreen
+import com.example.uma_authz_smartphone.ui.policy.PolicyScreen
 import com.example.uma_authz_smartphone.ui.theme.Uma_authz_smartphoneTheme
 
 class MainActivity : ComponentActivity() {
@@ -42,13 +45,13 @@ class MainActivity : ComponentActivity() {
                     val modifier = Modifier.padding(it)
                     NavHost(navController, startDestination = "authorize"){
                         composable("authorize"){
-                            Greeting(name = "authorize", modifier)
+                            AuthzScreen(modifier = modifier)
                         }
                         composable("manage"){
-                            Greeting(name = "manage", modifier)
+                            ManageScreen(modifier = modifier)
                         }
                         composable("policy"){
-                            Greeting(name = "policy", modifier)
+                            PolicyScreen(modifier = modifier)
                         }
                     }
                 }

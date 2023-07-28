@@ -58,4 +58,5 @@ dependencies {
     androidTestImplementation(composeBom)
 
     implementation(libs.koin.android)
+    implementation(libs.java.jwt)
 }
