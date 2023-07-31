@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">uma_authz_smartphone</string>
+    <string name="queuing_server">Queuing Server</string>
 </resources>
