@@ -66,6 +66,7 @@ dependencies {
 
     implementation(libs.koin.android)
     implementation(libs.java.jwt)
+    implementation(libs.kotlinx.datetime)
 
     // ktor
     implementation(libs.ktor.client.core)

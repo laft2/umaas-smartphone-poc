@@ -44,8 +44,8 @@ class AuthzRepository:KoinComponent {
         try {
             val response = client.get("http://10.0.2.2:9010/queue/requests")
             println(response.status)
-            val a: Test = response.body()
-            println(a.a)
+            val a: List<AuthorizationRequest> = response.body()
+            println(a)
             client.close()
         }catch (e: Exception){
             println(e)
