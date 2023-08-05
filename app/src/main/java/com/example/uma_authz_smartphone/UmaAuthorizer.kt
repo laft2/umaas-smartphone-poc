@@ -9,6 +9,7 @@ import com.example.uma_authz_smartphone.di.appModule
 import com.example.uma_authz_smartphone.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.workmanager.koin.workManagerFactory
 import org.koin.core.context.startKoin
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -20,6 +21,7 @@ class UmaAuthorizer : Application(){
             androidLogger()
             androidContext(this@UmaAuthorizer)
             modules(listOf(viewModelModule, appModule))
+            workManagerFactory()
         }
     }
 }

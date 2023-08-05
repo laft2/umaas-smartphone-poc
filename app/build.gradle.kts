@@ -65,6 +65,7 @@ dependencies {
     androidTestImplementation(libs.junit)
 
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.workmanager)
     implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
 

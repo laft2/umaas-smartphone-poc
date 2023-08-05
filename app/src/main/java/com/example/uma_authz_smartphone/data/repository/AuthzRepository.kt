@@ -1,12 +1,11 @@
 package com.example.uma_authz_smartphone.data.repository
 
 import android.content.Context
-import android.util.Log
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.uma_authz_smartphone.data.model.AccessToken
-import com.example.uma_authz_smartphone.data.model.AuthorizationRequest
+import com.example.uma_authz_smartphone.data.model.AuthorizationRequestEncrypted
+import com.example.uma_authz_smartphone.data.model.ClientRequest
 import com.example.uma_authz_smartphone.workers.RptIssueWorker
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -15,10 +14,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
+import kotlinx.serialization.json.JsonConfiguration
 import org.koin.core.component.KoinComponent
 import java.util.concurrent.TimeUnit
 
@@ -35,7 +31,7 @@ class AuthzRepository:KoinComponent {
         )
 
     }
-    suspend fun fetchAuthorizationRequests():List<AuthorizationRequest>{
+    suspend fun fetchAuthorizationRequests():List<ClientRequest>{
         val client = HttpClient(OkHttp){
             install(ContentNegotiation) {
                 json()
@@ -44,7 +40,7 @@ class AuthzRepository:KoinComponent {
         try {
             val response = client.get("http://10.0.2.2:9010/queue/requests")
             println(response.status)
-            val a: List<AuthorizationRequest> = response.body()
+            val a: List<AuthorizationRequestEncrypted> = response.body()
             println(a)
             client.close()
         }catch (e: Exception){
@@ -53,6 +49,8 @@ class AuthzRepository:KoinComponent {
 
         return listOf()
     }
+
+
 
 }
 @Serializable

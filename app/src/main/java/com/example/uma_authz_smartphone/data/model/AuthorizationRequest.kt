@@ -4,14 +4,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthorizationRequest(
-    val id: Int,
-    val grant_type: String,
     val ticket: String,
-    val claim_token: String?,
-    val claim_token_format: String?,
-    val pct: String?,
-    val rpt: String?,
-    val scopes: String?,
-    val status: String,
-    val created_at: String
+    val requested_scopes: List<RequestedResource>,
+    val client_request: ClientRequest,
+)
+
+@Serializable
+data class AuthorizationRequestEncrypted(
+    val ticket: String,
+    val requested_scopes: String,
+    val client_request: String,
 )
