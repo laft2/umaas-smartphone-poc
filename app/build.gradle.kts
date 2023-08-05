@@ -1,8 +1,10 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.android.application")
+//    id("io.realm.kotlin")
     kotlin("android")
     alias(libs.plugins.kotlin.serialization.plugin)
+    alias(libs.plugins.realm.plugin)
 }
 
 android {
@@ -74,4 +76,6 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
+
+    implementation(libs.realm)
 }

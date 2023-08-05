@@ -20,6 +20,7 @@ koin = "3.4.2"
 kotlinx-coroutines = "1.6.4"
 kotlinx-datetime = "0.4.0"
 ktor = "2.2.4"
+realm = "1.10.2"
 
 
 [libraries]
@@ -75,8 +76,11 @@ ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation",
 ktor-kotlinx-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor"}
 
+realm = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
+
 [plugins]
 android-plugin = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library-plugin = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 kotlin-android-plugin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+realm-plugin = { id = "io.realm.kotlin", version.ref = "realm" }

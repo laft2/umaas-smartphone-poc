@@ -12,4 +12,8 @@ class PolicyRepository {
         }
         return null
     }
+
+    fun getAllPolicies(): List<Policy>{
+        return policies
+    }
 }
