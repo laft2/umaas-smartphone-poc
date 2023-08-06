@@ -5,10 +5,17 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.Data
+import androidx.work.ExistingWorkPolicy
+import androidx.work.ListenableWorker
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.repository.AuthzRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
 import com.example.uma_authz_smartphone.dataStore
+import com.example.uma_authz_smartphone.workers.AuthorizeWorker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,4 +72,20 @@ class AuthzViewModel(
 //        // TODO: solve manual policy
 //        return false
 //    }
+
+    fun <T: ListenableWorker> enqueueWork(data: Data){
+        val workName = "workName"
+        val workManager = WorkManager.getInstance(context)
+        val a = OneTimeWorkRequestBuilder<AuthorizeWorker>()
+            .setInputData(data)
+            .build()
+            .also {
+                workManager.enqueueUniqueWork(
+                    workName,
+                    ExistingWorkPolicy.APPEND,
+                    it
+                )
+            }
+
+    }
 }
