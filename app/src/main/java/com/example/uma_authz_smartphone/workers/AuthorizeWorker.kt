@@ -3,14 +3,10 @@ package com.example.uma_authz_smartphone.workers
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-//import androidx.work.CoroutineWorker
-//import androidx.work.WorkerParameters
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.repository.AuthzRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
-import org.koin.androidx.compose.inject
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class AuthorizeWorker(
     appContext: Context,

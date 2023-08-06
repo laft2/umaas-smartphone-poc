@@ -2,7 +2,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-//    id("io.realm.kotlin")
     alias(libs.plugins.kotlin.serialization.plugin)
     alias(libs.plugins.realm.plugin)
 }
