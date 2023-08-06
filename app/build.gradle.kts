@@ -53,14 +53,14 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling)
-//    implementation(libs.androidx.work)
+    implementation(libs.androidx.work)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.datastore.preferences)
     androidTestImplementation(composeBom)
 
     implementation(libs.koin.android)
-//    implementation(libs.koin.androidx.workmanager)
+    implementation(libs.koin.androidx.workmanager)
     implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
 

@@ -10,15 +10,15 @@ import kotlinx.coroutines.launch
 class PolicyRepository(private val policyLocalDataSource: PolicyLocalDataSource) {
     private val policies = FakeFactory.policies()
 
-//    init {
-//        CoroutineScope(Dispatchers.IO).launch {
-//            if (policyLocalDataSource.fetchPolicies().isEmpty()) {
-//                policies.forEach {
-//                    policyLocalDataSource.createPolicy(it)
-//                }
-//            }
-//        }
-//    }
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (policyLocalDataSource.fetchPolicies().isEmpty()) {
+                policies.forEach {
+                    policyLocalDataSource.createPolicy(it)
+                }
+            }
+        }
+    }
 
 
     fun getPolicyByScope(resourceId: String, scope: String): Policy?{

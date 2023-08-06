@@ -10,10 +10,10 @@ import com.example.uma_authz_smartphone.datasource.PolicyLocalDataSource
 import com.example.uma_authz_smartphone.db.model.DbPolicy
 import com.example.uma_authz_smartphone.db.model.DbRegisteredResource
 import com.example.uma_authz_smartphone.db.model.DbResourceServer
-//import com.example.uma_authz_smartphone.workers.AuthorizeWorker
+import com.example.uma_authz_smartphone.workers.AuthorizeWorker
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
-//import org.koin.androidx.workmanager.dsl.worker
+import org.koin.androidx.workmanager.dsl.worker
 import org.koin.dsl.module
 
 val appModule = module{
@@ -36,5 +36,5 @@ val appModule = module{
     single { PolicyRepository(get()) }
     single { RptRepository() }
     single { RegisteredResourceRepository() }
-//    worker { AuthorizeWorker(get(), get()) }
+    worker { AuthorizeWorker(get(), get(), get(), get()) }
 }

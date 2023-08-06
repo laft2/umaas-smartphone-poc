@@ -53,12 +53,12 @@ fun PolicyCard(policy: Policy){
 
     ){
         val resourceRepository = RegisteredResourceRepository()
-        val resource = resourceRepository.getResource(policy.resourceId)!!
+        val resource = resourceRepository.getResource(policy.resourceId)
         Spacer(Modifier.padding(3.dp))
         Icon(Icons.Filled.Info, contentDescription = "rs_favicon")
         Spacer(modifier = Modifier.padding(10.dp))
         Column{
-            if (resource.name != null) Text(text = resource.name)
+            if (resource?.name != null) Text(text = resource.name)
             Text(text = policy.scope)
             Text(text = policy.policyType.toString())
         }
