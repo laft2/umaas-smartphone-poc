@@ -1,8 +1,8 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.android.application")
-//    id("io.realm.kotlin")
     kotlin("android")
+//    id("io.realm.kotlin")
     alias(libs.plugins.kotlin.serialization.plugin)
     alias(libs.plugins.realm.plugin)
 }
@@ -17,11 +17,6 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -30,11 +25,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
     buildFeatures {
         compose = true
@@ -58,16 +53,14 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.work)
+//    implementation(libs.androidx.work)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.datastore.preferences)
-
     androidTestImplementation(composeBom)
-    androidTestImplementation(libs.junit)
 
     implementation(libs.koin.android)
-    implementation(libs.koin.androidx.workmanager)
+//    implementation(libs.koin.androidx.workmanager)
     implementation(libs.java.jwt)
     implementation(libs.kotlinx.datetime)
 

@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 class AuthzViewModel(
     private val context: Context,
     private val authzRepository: AuthzRepository,
-    private val policyRepository: PolicyRepository,
+//    private val policyRepository: PolicyRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow(AuthzUiState())
     val uiState = _uiState.asStateFlow()
@@ -27,7 +27,7 @@ class AuthzViewModel(
 
     init{
         viewModelScope.launch {
-            authzRepository.fetchAuthorizationRequests()
+//            authzRepository.fetchAuthorizationRequests()
         }
     }
 
@@ -45,24 +45,24 @@ class AuthzViewModel(
     }
 
 
-    fun authorize(
-        resourceId: String,
-        scopes: List<String>,
-    ): Boolean{
-        val policyList = mutableListOf<Policy>()
-        for (scope in scopes) {
-            val policy = policyRepository.getPolicyByScope(resourceId, scope) ?: return false
-            if(policy.policyType == Policy.PolicyType.DENY){
-                return false
-            }
-            if(policy.policyType == Policy.PolicyType.MANUAL){
-                policyList.add(policy)
-            }
-        }
-        if(policyList.isEmpty()){
-            return true
-        }
-        // TODO: solve manual policy
-        return false
-    }
+//    fun authorize(
+//        resourceId: String,
+//        scopes: List<String>,
+//    ): Boolean{
+//        val policyList = mutableListOf<Policy>()
+//        for (scope in scopes) {
+//            val policy = policyRepository.getPolicyByScope(resourceId, scope) ?: return false
+//            if(policy.policyType == Policy.PolicyType.DENY){
+//                return false
+//            }
+//            if(policy.policyType == Policy.PolicyType.MANUAL){
+//                policyList.add(policy)
+//            }
+//        }
+//        if(policyList.isEmpty()){
+//            return true
+//        }
+//        // TODO: solve manual policy
+//        return false
+//    }
 }

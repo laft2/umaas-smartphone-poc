@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
                 val items: List<String> = listOf("authorize", "manage", "policy")
+
                 
                 Scaffold(
                     bottomBar = {BottomNavigationBar(items = items, navController = navController)}

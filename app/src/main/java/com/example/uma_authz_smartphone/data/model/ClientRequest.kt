@@ -1,8 +1,8 @@
 package com.example.uma_authz_smartphone.data.model
 
-import kotlinx.serialization.Serializable
+//import kotlinx.serialization.Serializable
 
-@Serializable
+//@Serializable
 data class ClientRequest(
     val id: Int,
     val grant_type: String,

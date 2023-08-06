@@ -23,14 +23,15 @@ import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.repository.AuthzRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
 import com.example.uma_authz_smartphone.data.repository.RegisteredResourceRepository
+import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PolicyScreen(
     viewModel: PolicyViewModel = koinViewModel(),
     modifier: Modifier = Modifier,
+    policyRepository: PolicyRepository = get()
 ) {
-    val policyRepository = PolicyRepository()
     val policies = policyRepository.getAllPolicies()
 
     Column {
@@ -66,8 +67,9 @@ fun PolicyCard(policy: Policy){
 
 @Preview
 @Composable
-fun PolicyCardPreview(){
-    val repo = PolicyRepository()
+fun PolicyCardPreview(
+    repo: PolicyRepository = get()
+){
     val policy = repo.getAllPolicies()[0]
     PolicyCard(policy = policy)
 }

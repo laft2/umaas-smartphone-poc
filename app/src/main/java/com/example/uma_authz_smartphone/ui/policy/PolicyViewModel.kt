@@ -10,7 +10,6 @@ class PolicyViewModel(
 ): ViewModel() {
     private val _uiState = MutableStateFlow(ManageUiState())
     val uiState = _uiState.asStateFlow()
-    val repository = PolicyRepository()
 
 
 

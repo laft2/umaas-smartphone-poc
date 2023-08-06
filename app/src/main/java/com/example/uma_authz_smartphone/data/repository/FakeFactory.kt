@@ -29,26 +29,31 @@ internal class FakeFactory {
         fun policies():List<Policy>{
             return listOf(
                 Policy(
+                    id = "tekitouniikouyou",
                     resourceId = "7b727369647d",
                     scope = "view",
                     policyType = Policy.PolicyType.ACCEPT
                 ),
                 Policy(
+                    id = "very tekitou uuid",
                     resourceId = "7b727369647d",
                     scope = "crop",
                     policyType = Policy.PolicyType.MANUAL,
                 ),
                 Policy(
+                    id = "tekitou",
                     resourceId = "7b727369647d",
                     scope = "lightbox",
                     policyType = Policy.PolicyType.DENY,
                 ),
                 Policy(
+                    id = "tekitou",
                     resourceId = "112210f47de98100",
                     scope = "view",
                     policyType = Policy.PolicyType.ACCEPT,
                 ),
                 Policy(
+                    id = "tekitou",
                     resourceId = "112210f47de98100",
                     scope = "http://photoz.example.com/dev/scopes/print",
                     policyType = Policy.PolicyType.MANUAL,

@@ -1,42 +1,46 @@
 package com.example.uma_authz_smartphone.workers
 
 import android.content.Context
-import androidx.work.CoroutineWorker
-import androidx.work.WorkerParameters
+//import androidx.work.CoroutineWorker
+//import androidx.work.WorkerParameters
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.repository.AuthzRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
+import org.koin.androidx.compose.inject
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class AuthorizeWorker(
-    appContext: Context,
-    workerParams: WorkerParameters,
-):
-    CoroutineWorker(appContext, workerParams) {
-    override suspend fun doWork(): Result {
-        val authzRepository = AuthzRepository()
-        val requests = authzRepository.fetchAuthorizationRequests()
-
-        TODO("Not yet implemented")
-    }
-    private fun authorize(
-        resourceId: String,
-        scopes: List<String>,
-    ): Boolean{
-        val policyList = mutableListOf<Policy>()
-        val policyRepository = PolicyRepository()
-        for (scope in scopes) {
-            val policy = policyRepository.getPolicyByScope(resourceId, scope) ?: return false
-            if(policy.policyType == Policy.PolicyType.DENY){
-                return false
-            }
-            if(policy.policyType == Policy.PolicyType.MANUAL){
-                policyList.add(policy)
-            }
-        }
-        if(policyList.isEmpty()){
-            return true
-        }
-        // TODO: solve manual policy
-        return false
-    }
-}
+//class AuthorizeWorker(
+//    appContext: Context,
+//    workerParams: WorkerParameters,
+//):
+//    CoroutineWorker(appContext, workerParams), KoinComponent {
+//
+//    private val authzRepository by inject<AuthzRepository>()
+////    private val policyRepository by inject<PolicyRepository>()
+//    override suspend fun doWork(): Result {
+////        val requests = authzRepository.fetchAuthorizationRequests()
+//
+//        TODO("Not yet implemented")
+//    }
+//    private fun authorize(
+//        resourceId: String,
+//        scopes: List<String>,
+//    ): Boolean{
+//        val policyList = mutableListOf<Policy>()
+//        for (scope in scopes) {
+////            val policy = policyRepository.getPolicyByScope(resourceId, scope) ?: return false
+////            if(policy.policyType == Policy.PolicyType.DENY){
+////                return false
+////            }
+////            if(policy.policyType == Policy.PolicyType.MANUAL){
+////                policyList.add(policy)
+////            }
+//        }
+//        if(policyList.isEmpty()){
+//            return true
+//        }
+//        // TODO: solve manual policy
+//        return false
+//    }
+//}
