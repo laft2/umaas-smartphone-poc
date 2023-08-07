@@ -2,7 +2,9 @@ package com.example.uma_authz_smartphone.db.model
 
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.model.RegisteredResource
+import io.realm.kotlin.ext.backlinks
 import io.realm.kotlin.ext.realmListOf
+import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.EmbeddedRealmObject
 import io.realm.kotlin.types.RealmList
 import io.realm.kotlin.types.RealmObject
@@ -38,6 +40,9 @@ class DbRegisteredResource():RealmObject {
 
 }
 
-class DbRegisteredScope:EmbeddedRealmObject {
+class DbRegisteredScope:RealmObject {
+    @PrimaryKey
+    var id: RealmUUID = RealmUUID.random()
+    val resource: RealmResults<DbRegisteredResource> by backlinks(DbRegisteredResource::resourceScopes)
     var scope: String = ""
 }

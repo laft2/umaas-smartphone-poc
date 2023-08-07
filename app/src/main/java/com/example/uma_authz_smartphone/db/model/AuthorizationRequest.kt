@@ -17,6 +17,7 @@ class DbAuthorizationRequest: RealmObject {
 }
 
 class DbRequestedResource: EmbeddedRealmObject {
+    var resourceId: String = ""
     var resource: DbRegisteredResource? = null
     var scopes: RealmList<DbRequestedScope> = realmListOf()
 }
@@ -26,8 +27,6 @@ class DbRequestedScope: EmbeddedRealmObject{
 }
 
 class DbClientInfo: EmbeddedRealmObject {
-    @PrimaryKey
-    var id: RealmUUID = RealmUUID.random()
     var domain: String = ""
     var publicKey: String = ""
     var rptEndpoint: String = ""

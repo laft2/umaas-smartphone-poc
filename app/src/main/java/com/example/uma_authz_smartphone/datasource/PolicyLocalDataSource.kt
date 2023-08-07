@@ -3,6 +3,7 @@ package com.example.uma_authz_smartphone.datasource
 import android.util.Log
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.db.model.DbPolicy
+import com.example.uma_authz_smartphone.db.model.DbRegisteredScope
 import io.realm.kotlin.Realm
 import io.realm.kotlin.TypedRealm
 import io.realm.kotlin.types.RealmUUID
@@ -16,7 +17,9 @@ class PolicyLocalDataSource(private val realm: Realm) {
         realm.write {
             copyToRealm(
                 DbPolicy().apply {
-                    scope = policy.scope
+                    scope = DbRegisteredScope().apply {
+                        scope = policy.scope
+                    }
                     type = policy.policyType.name
                 }
             )
