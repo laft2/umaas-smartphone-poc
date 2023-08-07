@@ -42,6 +42,6 @@ class PolicyRepository(private val policyLocalDataSource: PolicyLocalDataSource)
 private fun DbPolicy.toPolicy():Policy = Policy(
     id = id.toString(),
     resourceId = "",
-    scope = scope,
+    scope = scope?.scope?:"empty",
     policyType = Policy.PolicyType.valueOf(type)
 )

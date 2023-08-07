@@ -23,22 +23,12 @@ class AuthorizationRequestLocalDataSource(private val realm: Realm) {
                 DbAuthorizationRequest().apply {
                     isWaiting = true
 
+
                 }
             )
         }
     }
 
-    suspend fun createRequestedResource(requestedResource: RequestedResource): DbRequestedResource{
-        val resourceId = requestedResource.resource_id
-        val registeredResource = getRegisteredResource(resourceId)
-        return realm.write {
-            copyToRealm(
-                DbRequestedResource().apply {
-                    resource = registeredResource
-                }
-            )
-        }
-    }
 
     fun getRegisteredResource(resourceId: String): DbRegisteredResource? {
         return realm.query(DbRegisteredResource::class, "resourceId == $1", resourceId).first().find()
