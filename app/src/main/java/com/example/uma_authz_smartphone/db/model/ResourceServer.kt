@@ -8,4 +8,10 @@ class DbResourceServer:RealmObject {
     @PrimaryKey
     var id: RealmUUID = RealmUUID.random()
     var publicKey: String = ""
+
+    companion object{
+        fun getTestValue(): DbResourceServer{
+            return DbResourceServer()
+        }
+    }
 }

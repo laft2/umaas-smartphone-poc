@@ -11,6 +11,16 @@ class DbPolicy(): RealmObject{
     @PrimaryKey
     var id: RealmUUID = RealmUUID.random()
     var resource: DbRegisteredResource? = null
-    var scope: String = ""
+    var scope: DbRegisteredScope? = null
     var type: String = Policy.PolicyType.MANUAL.name
+
+    companion object{
+        fun getTestValue(resource: DbRegisteredResource?): DbPolicy {
+            val res = DbPolicy()
+            res.resource = resource
+            res.scope = resource?.resourceScopes?.get(0)
+            return res
+        }
+    }
+
 }

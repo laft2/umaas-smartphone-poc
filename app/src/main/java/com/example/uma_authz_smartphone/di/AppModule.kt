@@ -30,7 +30,7 @@ val appModule = module{
     }
     single { PolicyLocalDataSource(get()) }
 
-    single { AuthzRepository() }
+    single { AuthzRepository(get()) }
     single { ManageRepository() }
     single { PatRepository() }
     single { PolicyRepository(get()) }
