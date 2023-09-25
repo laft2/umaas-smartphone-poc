@@ -45,4 +45,5 @@ class DbRegisteredScope:RealmObject {
     var id: RealmUUID = RealmUUID.random()
     val resource: RealmResults<DbRegisteredResource> by backlinks(DbRegisteredResource::resourceScopes)
     var scope: String = ""
+    val policy: RealmResults<DbPolicy> by backlinks(DbPolicy::scope)
 }

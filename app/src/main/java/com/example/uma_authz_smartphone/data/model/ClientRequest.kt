@@ -4,13 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClientRequest(
-    val id: Int,
     val grant_type: String,
     val ticket: String,
-    val claim_token: String?,
-    val claim_token_format: String?,
-    val pct: String?,
-    val rpt: String?,
-    val scopes: String?,
+    val claim_token: String? = null,
+    val claim_token_format: String? = null,
+    val pct: String? = null,
+    val rpt: String? = null,
+    val scopes: String? = null,
 //    val created_at: String
 )

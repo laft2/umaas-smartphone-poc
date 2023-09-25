@@ -10,5 +10,5 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 val viewModelModule = module {
     viewModel { AuthzViewModel(get(), get()) }
     viewModel { ManageViewModel() }
-    viewModel { PolicyViewModel() }
+    viewModel { PolicyViewModel(get(), get(), get()) }
 }

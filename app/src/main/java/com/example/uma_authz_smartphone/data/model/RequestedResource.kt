@@ -7,9 +7,7 @@ import kotlinx.serialization.Serializable
 data class RequestedResources(
     val resources: List<RequestedResource>,
     val client_key: String, // public key
-){
-
-}
+)
 
 @Serializable
 data class RequestedResource(

@@ -6,7 +6,9 @@ import com.example.uma_authz_smartphone.data.repository.ManageRepository
 import com.example.uma_authz_smartphone.data.repository.PatRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
 import com.example.uma_authz_smartphone.data.repository.RptRepository
+import com.example.uma_authz_smartphone.datasource.AuthorizationRequestLocalDataSource
 import com.example.uma_authz_smartphone.datasource.PolicyLocalDataSource
+import com.example.uma_authz_smartphone.datasource.RegisteredResourceLocalDataSource
 import com.example.uma_authz_smartphone.db.model.DbAuthorizationRequest
 import com.example.uma_authz_smartphone.db.model.DbClientInfo
 import com.example.uma_authz_smartphone.db.model.DbPolicy
@@ -35,17 +37,20 @@ val appModule = module{
                 DbPolicy::class,
                 DbRegisteredScope::class,
             ))
-                .deleteRealmIfMigrationNeeded()
+//                .deleteRealmIfMigrationNeeded()
+                .inMemory()
                 .build()
         )
     }
-    single { PolicyLocalDataSource(get()) }
+    single { PolicyLocalDataSource(get(), get()) }
+    single { AuthorizationRequestLocalDataSource(get()) }
+    single { RegisteredResourceLocalDataSource(get())}
 
-    single { AuthzRepository(get()) }
+    single { AuthzRepository(get(), get()) }
     single { ManageRepository() }
     single { PatRepository() }
     single { PolicyRepository(get()) }
     single { RptRepository() }
-    single { RegisteredResourceRepository() }
+    single { RegisteredResourceRepository(get()) }
     worker { AuthorizeWorker(get(), get(), get(), get()) }
 }

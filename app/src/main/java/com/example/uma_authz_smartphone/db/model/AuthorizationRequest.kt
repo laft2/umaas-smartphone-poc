@@ -11,7 +11,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 class DbAuthorizationRequest: RealmObject {
     @PrimaryKey
     var id: RealmUUID = RealmUUID.random()
-    var resources: DbRequestedResource? = null
+    var resources: RealmList<DbRequestedResource> = realmListOf()
     var clientInfo: DbClientInfo? = null
     var isWaiting: Boolean = true
 }

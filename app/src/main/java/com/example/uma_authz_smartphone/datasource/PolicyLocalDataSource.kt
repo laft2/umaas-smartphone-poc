@@ -1,26 +1,42 @@
 package com.example.uma_authz_smartphone.datasource
 
-import android.util.Log
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.db.model.DbPolicy
 import com.example.uma_authz_smartphone.db.model.DbRegisteredScope
 import io.realm.kotlin.Realm
 import io.realm.kotlin.TypedRealm
+import io.realm.kotlin.ext.query
+import io.realm.kotlin.notifications.ResultsChange
+import io.realm.kotlin.query.RealmResults
 import io.realm.kotlin.types.RealmUUID
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
-class PolicyLocalDataSource(private val realm: Realm) {
+class PolicyLocalDataSource(
+    private val realm: Realm,
+    private val resourceLocalDataSource: RegisteredResourceLocalDataSource
+) {
     fun fetchPolicies(): List<DbPolicy>{
-        return realm.query(DbPolicy::class).find().toList()
+        return realm.query<DbPolicy>().find().toList()
     }
 
-    suspend fun createPolicy(policy: Policy){
-        realm.write {
+    fun fetchPoliciesAsFlow(): Flow<List<DbPolicy>> {
+        return realm.query<DbPolicy>().asFlow().map { it.list }
+    }
+
+    suspend fun createPolicy(policy: Policy): DbPolicy?{
+        val fetchedResource = resourceLocalDataSource.fetchResourceByResourceId(policy.resourceId)
+        fetchedResource?: return null
+        val fetchedScope: DbRegisteredScope? = fetchedResource.resourceScopes.find {
+            it.scope == policy.scope
+        }
+        fetchedScope?: return null
+        return realm.write {
             copyToRealm(
                 DbPolicy().apply {
-                    scope = DbRegisteredScope().apply {
-                        scope = policy.scope
-                    }
+                    scope = findLatest(fetchedScope)
                     type = policy.policyType.name
+                    resource = findLatest(fetchedResource)
                 }
             )
         }
@@ -35,8 +51,13 @@ class PolicyLocalDataSource(private val realm: Realm) {
         }
     }
 
-    fun fetchPoliciesByScopes(){
-
+    fun fetchPolicyByScope(resourceId: String, scope: String): DbPolicy? {
+        return realm.query(
+            DbPolicy::class,
+            "resource.resourceId == $0 AND scope.scope == $1",
+            resourceId,
+            scope
+        ).first().find()
     }
 }
 
