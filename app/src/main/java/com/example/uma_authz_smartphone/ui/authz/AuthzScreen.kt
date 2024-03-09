@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.uma_authz_smartphone.R
 import com.example.uma_authz_smartphone.data.model.AuthorizationLog
 import com.example.uma_authz_smartphone.datasource.toAuthorizationLog
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.compose.koinViewModel
 
 @Preview
@@ -37,11 +41,14 @@ fun AuthzScreen(
 
 @Composable
 fun QSUriField(viewModel: AuthzViewModel){
-    val qsUri by viewModel.qsUri.collectAsState(initial = "")
+    var qsUri by rememberSaveable{ mutableStateOf(viewModel.getQsUriPreference())}
 
     OutlinedTextField(
         value = qsUri,
-        onValueChange = { viewModel.onQsUriFieldChange(it) },
+        onValueChange = {
+            qsUri = it
+            viewModel.editQsUriPreference(it)
+                        },
         label = { Text(stringResource(R.string.queuing_server)) },
     )
 }
@@ -57,7 +64,6 @@ fun ObtainRequestsButton(viewModel: AuthzViewModel){
 
 @Composable
 fun AuthorizedRequestsCards(viewModel: AuthzViewModel){
-    // TODO: implement, for test below
     val authorizationLogs by viewModel.authorizationLogs.collectAsStateWithLifecycle()
     for (log in authorizationLogs){
         AuthorizationLogCard(log.toAuthorizationLog())

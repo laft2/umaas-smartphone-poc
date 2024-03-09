@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -57,11 +58,17 @@ class AuthzViewModel(
         }
     }
 
-    val qsUri: Flow<String> = context.dataStore.data.map {
-        it[qsUriKey] ?: ""
+    fun getQsUriPreference(): String{
+        var res = ""
+        viewModelScope.launch {
+            context.dataStore.data.map { it[qsUriKey] ?: "" }.collect{
+                res = it
+            }
+        }
+        return res
     }
 
-    fun onQsUriFieldChange(newValue: String){
+    fun editQsUriPreference(newValue: String){
 
         viewModelScope.launch {
             context.dataStore.edit {
