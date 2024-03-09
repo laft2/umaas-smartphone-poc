@@ -18,28 +18,13 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import java.util.concurrent.TimeUnit
 
 class AuthzRepository(
     val policyRepository: PolicyRepository,
     val authzDataSource: AuthorizationRequestLocalDataSource
 ) {
-    fun startAuthorizeRequestWorker(context: Context){
-        val workRequest = PeriodicWorkRequestBuilder<RptIssueWorker>(
-            15, TimeUnit.MINUTES,
-            5, TimeUnit.MINUTES
-        ).build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "getRequestFromQS",
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
-        )
-
-    }
-    suspend fun fetchAuthorizationRequests():List<AuthorizationRequest>{
+    private suspend fun fetchAuthorizationRequests():List<AuthorizationRequest>{
         val client = HttpClient(OkHttp){
             install(ContentNegotiation) {
                 json()
@@ -69,10 +54,10 @@ class AuthzRepository(
             when (result) {
                 // TODO: logging
                 AuthorizationResult.ACCEPT -> {
-                    sendRpt(request)
+                    fakeSendRpt(request)
                 }
                 AuthorizationResult.MANUAL -> {
-                    authzDataSource.createManualRequest(request)
+//                    authzDataSource.createManualRequest(request)
                 }
                 AuthorizationResult.DENY -> {
 
@@ -106,7 +91,7 @@ class AuthzRepository(
         return AuthorizationResult.MANUAL
     }
 
-    suspend fun sendRpt(request: AuthorizationRequest){
+    suspend fun fakeSendRpt(request: AuthorizationRequest){
         Log.d("testAuthorizationFlow", "sendRpt")
     }
 }

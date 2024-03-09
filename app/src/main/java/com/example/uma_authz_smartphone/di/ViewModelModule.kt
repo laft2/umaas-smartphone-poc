@@ -8,7 +8,7 @@ import org.koin.dsl.module
 import org.koin.androidx.viewmodel.dsl.viewModel
 
 val viewModelModule = module {
-    viewModel { AuthzViewModel(get(), get()) }
+    viewModel { AuthzViewModel(get(), get(), get()) }
     viewModel { ManageViewModel() }
     viewModel { PolicyViewModel(get(), get(), get()) }
 }

@@ -18,6 +18,14 @@ class AuthorizationRequestLocalDataSource(private val realm: Realm) {
         realm.query(DbAuthorizationRequest::class, "isWaiting == true").find().toList()
     }
 
+    fun createAuthorizationRequest(authorizationRequest: AuthorizationRequest){
+        val requestedResources = authorizationRequest.requested_scopes.resources
+        val realmResources = realmListOf<DbRequestedResource>()
+        for(resource in requestedResources){
+
+        }
+    }
+
     suspend fun createManualRequest(authorizationRequest: AuthorizationRequest){
         val reqResources = authorizationRequest.requested_scopes.resources
         val realmResources = realmListOf<DbRequestedResource>()

@@ -15,7 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.uma_authz_smartphone.R
+import com.example.uma_authz_smartphone.data.model.AuthorizationLog
+import com.example.uma_authz_smartphone.datasource.toAuthorizationLog
 import org.koin.androidx.compose.koinViewModel
 
 @Preview
@@ -55,15 +58,21 @@ fun ObtainRequestsButton(viewModel: AuthzViewModel){
 @Composable
 fun AuthorizedRequestsCards(viewModel: AuthzViewModel){
     // TODO: implement, for test below
-    AuthorizedRequestCard(textString = "for test")
+    val authorizationLogs by viewModel.authorizationLogs.collectAsStateWithLifecycle()
+    for (log in authorizationLogs){
+        AuthorizationLogCard(log.toAuthorizationLog())
+    }
 }
 
 @Composable
-fun AuthorizedRequestCard(textString: String){
+fun AuthorizationLogCard(authorizationLog: AuthorizationLog){
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         modifier = Modifier.fillMaxWidth(0.9f),
     ) {
-        Text(text = textString)
+        Text(text = "${authorizationLog.timestamp}")
+        Text("approved: ${authorizationLog.isApproved}")
+        Text("target resources: ${authorizationLog.resourceIds}")
+        Text("by ${authorizationLog.clientInfo}")
     }
 }

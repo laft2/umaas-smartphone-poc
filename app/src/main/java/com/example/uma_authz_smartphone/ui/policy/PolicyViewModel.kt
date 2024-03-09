@@ -37,43 +37,10 @@ class PolicyViewModel(
         }
     }
 
-    init{
-        generateTestPolicy()
-    }
 
-    fun generateTestPolicy(){
 
-        viewModelScope.launch {
-            generateTestRegisteredResource()
-            val policy = Policy(
-                id = "test",
-                policyType = Policy.PolicyType.MANUAL,
-                scope = "test",
-                resourceId = "test_resource_id"
-            )
-            val dbPolicy = policyLocalDataSource.createPolicy(policy)
-            Log.d("testAuthorizationFlow", dbPolicy.toString())
-            val policy2 = policy.copy(scope = "view", policyType = Policy.PolicyType.ACCEPT)
-            val dbPolicy2 = policyLocalDataSource.createPolicy(policy2)
-            val policy3 = policy.copy(scope = "edit", policyType = Policy.PolicyType.DENY)
-            policyLocalDataSource.createPolicy(policy3)
-            Log.d("testAuthorizationFlow", dbPolicy2.toString())
-        }
-    }
 
-    private suspend fun generateTestRegisteredResource(): DbRegisteredResource {
-        return resourceLocalDataSource.createResource(RegisteredResource(
-            resourceId = "test_resource_id",
-            rsId = "",
-            resourceScopes = listOf(
-                "test",
-                "view",
-                "edit",
-            ),
-            description = "for test",
-            name = "test resource",
-        ))
-    }
+
 
 
 }

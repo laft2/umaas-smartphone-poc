@@ -20,6 +20,7 @@ class PolicyLocalDataSource(
         return realm.query<DbPolicy>().find().toList()
     }
 
+
     fun fetchPoliciesAsFlow(): Flow<List<DbPolicy>> {
         return realm.query<DbPolicy>().asFlow().map { it.list }
     }
