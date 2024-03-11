@@ -11,6 +11,6 @@ data class ClientRequest(
     val pct: String? = null,
     val rpt: String? = null,
     val scopes: String? = null,
-    val clientInfo: String = "",
+    val client_info: String = "",
 //    val created_at: String
 )

@@ -17,25 +17,39 @@ import com.example.uma_authz_smartphone.data.model.ClientRequest
 import com.example.uma_authz_smartphone.data.model.Policy
 import com.example.uma_authz_smartphone.data.model.RequestedResource
 import com.example.uma_authz_smartphone.data.model.RequestedResources
-import com.example.uma_authz_smartphone.data.repository.AuthzRepository
 import com.example.uma_authz_smartphone.data.repository.PolicyRepository
 import com.example.uma_authz_smartphone.dataStore
 import com.example.uma_authz_smartphone.datasource.AuthorizationLogsLocalDataSource
 import com.example.uma_authz_smartphone.datasource.toAuthorizationLog
 import com.example.uma_authz_smartphone.db.model.DbAuthorizationLog
-import com.example.uma_authz_smartphone.db.model.DbPolicy
 import com.example.uma_authz_smartphone.workers.AuthorizeWorker
-import kotlinx.coroutines.flow.Flow
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -58,20 +72,26 @@ class AuthzViewModel(
         }
     }
 
+    fun updateQsUriUiState(newValue: String){
+        _uiState.update {
+            it.copy(
+                qsUri = newValue
+            )
+        }
+    }
+
     fun getQsUriPreference(): String{
         var res = ""
-        viewModelScope.launch {
-            context.dataStore.data.map { it[qsUriKey] ?: "" }.collect{
-                res = it
-            }
+        runBlocking(Dispatchers.IO) {
+            res = context.dataStore.data.map { it[qsUriKey]?:"" }.first()
         }
         return res
     }
 
     fun editQsUriPreference(newValue: String){
-
         viewModelScope.launch {
             context.dataStore.edit {
+                Log.d("edit pref", newValue)
                 it[qsUriKey] = newValue
             }
         }
@@ -93,33 +113,55 @@ class AuthzViewModel(
                 client_request = ClientRequest(
                     "test_grant_type",
                     "test_ticket",
-                    clientInfo = "sample_client"
+                    client_info = "sample_client"
                 )
             )
         )
         return authorizationRequests
     }
 
+
+    private suspend fun obtainRequests(targetUri: String):List<AuthorizationRequest>{
+        val client = HttpClient(OkHttp){
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        try {
+            val response = client.get(targetUri)
+            println(response.status)
+            val a: List<AuthorizationRequest> = response.body()
+            println(a)
+            client.close()
+            return a
+        }catch (e: Exception){
+            println(e)
+        }
+
+        return listOf()
+    }
+
     fun authorizeRequestsFromQS(){
-        val targetUri = uiState.value.qsUri
         viewModelScope.launch(){
-            val requests = fakeObtainRequests(targetUri)
+            val targetUri = getQsUriPreference()
+            Log.d("test_pref", targetUri)
+            val requests = obtainRequests(targetUri)
             for (request in requests){
                 val result = authorizeRequests(request.requested_scopes.resources)
                 authzLogsLocalDataSource.createLog(AuthorizationLog(
                     isApproved = result,
                     resourceIds = request.requested_scopes.resources.map { it.resource_id },
                     timestamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
-                    clientInfo = request.client_request.clientInfo,
+                    clientInfo = request.client_request.client_info,
                 ))
             }
         }
     }
 
-    fun fetchAuthorizationLogs(): List<AuthorizationLog>{
-        val logs = authzLogsLocalDataSource.fetchAllLogs().map { it.toAuthorizationLog() }
-        return logs.sortedBy { it.timestamp }
-    }
+//    fun fetchAuthorizationLogs(): List<AuthorizationLog>{
+//        val logs = authzLogsLocalDataSource.fetchAllLogs().map { it.toAuthorizationLog() }
+//        return logs.sortedBy { it.timestamp }
+//    }
 
     private fun authorizeRequests(
         resources: List<RequestedResource>

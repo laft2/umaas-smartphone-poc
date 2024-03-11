@@ -48,6 +48,7 @@ fun QSUriField(viewModel: AuthzViewModel){
         onValueChange = {
             qsUri = it
             viewModel.editQsUriPreference(it)
+            viewModel.updateQsUriUiState(it)
                         },
         label = { Text(stringResource(R.string.queuing_server)) },
     )

@@ -56,5 +56,6 @@ val appModule = module{
     single { PolicyRepository(get(), get()) }
     single { RptRepository() }
     single { RegisteredResourceRepository(get()) }
+
     worker { AuthorizeWorker(get(), get(), get(), get()) }
 }
