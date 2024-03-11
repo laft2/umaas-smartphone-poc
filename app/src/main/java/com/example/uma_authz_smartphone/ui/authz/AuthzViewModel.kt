@@ -66,11 +66,6 @@ class AuthzViewModel(
     val authorizationLogs: StateFlow<List<DbAuthorizationLog>> = authzLogsLocalDataSource.fetchLogsAsFlow()
         .stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    init{
-        viewModelScope.launch {
-//            authzRepository.fetchAuthorizationRequests()
-        }
-    }
 
     fun updateQsUriUiState(newValue: String){
         _uiState.update {
@@ -144,7 +139,6 @@ class AuthzViewModel(
     fun authorizeRequestsFromQS(){
         viewModelScope.launch(){
             val targetUri = getQsUriPreference()
-            Log.d("test_pref", targetUri)
             val requests = obtainRequests(targetUri)
             for (request in requests){
                 val result = authorizeRequests(request.requested_scopes.resources)
@@ -195,19 +189,4 @@ class AuthzViewModel(
         return false
     }
 
-    fun <T: ListenableWorker> enqueueWork(data: Data){
-        val workName = "workName"
-        val workManager = WorkManager.getInstance(context)
-        val a = OneTimeWorkRequestBuilder<AuthorizeWorker>()
-            .setInputData(data)
-            .build()
-            .also {
-                workManager.enqueueUniqueWork(
-                    workName,
-                    ExistingWorkPolicy.APPEND,
-                    it
-                )
-            }
-
-    }
 }
