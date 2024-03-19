@@ -11,6 +11,9 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.ListenableWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.auth0.jwt.JWT
+import com.example.uma_authz_smartphone.data.model.AccessToken
+import com.example.uma_authz_smartphone.data.model.AccessTokenForClient
 import com.example.uma_authz_smartphone.data.model.AuthorizationLog
 import com.example.uma_authz_smartphone.data.model.AuthorizationRequest
 import com.example.uma_authz_smartphone.data.model.ClientRequest
@@ -27,7 +30,14 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
+import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HeadersBuilder
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -148,6 +158,9 @@ class AuthzViewModel(
                     timestamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()),
                     clientInfo = request.client_request.client_info,
                 ))
+                if(result){
+                    SendAT(targetUri, request.requested_scopes.resources)
+                }
             }
         }
     }
@@ -156,6 +169,36 @@ class AuthzViewModel(
 //        val logs = authzLogsLocalDataSource.fetchAllLogs().map { it.toAuthorizationLog() }
 //        return logs.sortedBy { it.timestamp }
 //    }
+
+
+    private suspend fun SendAT(targetUri: String, targetScopes: List<RequestedResource>):Boolean{
+        val client = HttpClient(OkHttp){
+            install(ContentNegotiation) {
+                json()
+            }
+        }
+        val accessToken = AccessToken(
+            scopes = targetScopes,
+            encrypted_key = "PK_RS", signed_key = "SK_AR"
+        )
+        try {
+            val response = client.post(targetUri){
+                contentType(ContentType.Application.Json)
+                setBody(AccessTokenForClient(
+                    access_token = accessToken,
+                    encrypted_key = "PK_C",
+                    signed_key = "SK_AC",
+                ))
+            }
+            println(response.status)
+            val responseCode = response.status.value
+            client.close()
+            return responseCode in 200..299
+        }catch (e: Exception){
+            println(e)
+            return false
+        }
+    }
 
     private fun authorizeRequests(
         resources: List<RequestedResource>
