@@ -5,3 +5,6 @@
 3. Run with the Android emulator in Android Studio
 4. Set QS URI in "Queuing Server" field in the Authorization Screen and push "Obtain requests from QS" button
 5. Then AS automatically authorize requests and show the result
+
+## Links
++ [https://github.com/laft2/self-managed-uma](Other servers of our systems)
