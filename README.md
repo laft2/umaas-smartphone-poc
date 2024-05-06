@@ -1,4 +1,4 @@
-# PoC of mthesis in Android
+# PoC of UMA-like Authorization Server in Android
 ## How to Use
 1. Install Android Studio
 2. Clone this repo in Android Studio directory
