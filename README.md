@@ -7,4 +7,4 @@
 5. Then AS automatically authorize requests and show the result
 
 ## Links
-+ [https://github.com/laft2/self-managed-uma](Other servers of our systems)
++ [Other servers of our systems](https://github.com/laft2/self-managed-uma)
